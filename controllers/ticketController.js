@@ -1,37 +1,81 @@
-const Ticket = require('../models/Ticket')
+const mongoose = require("mongoose");
 
+const Schema = mongoose.Schema;
 
-module.exports.getAll = async (req, res, next) => {
-    const tickets = await Ticket.find({})
-    res.send(tickets)
-}
+const Tickets = new Schema({
+    
+    support_by:{
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'users'
+    },
+    ticket_by:{
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'users'
+    },
+    create_at:{
+        type: Date,
+        default: Date.now
+    },
+    closet_at:{
+        type: Date
+    },
+    caregory:{
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'category',
+        required: true
+    },
+    archave:{
+        type: Boolean,
+        default: true
+    },
+    redirce_to:{
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'users'
+    },
+    withing:{
+        type: Boolean,
+        default: true
+    },
+    subject:{
+        type: String,
+        trim: true
+    },
+    rating:{
+        type: String,
+        trim: true,
+        default: "0.0"
+    },
+    is_readet:{
+        to:{
+            type: Number,
+            default: 1
+        },
+        status:{
+            type: Boolean,
+            default: true
+        }
+    },
+    content: [
+        {
 
-module.exports.createTicket = async (req, res, next) => {
-    const {
-        subject,
-        body,
-        user,
-        assignment,
-        category,
-        status,
-        attachment
-    } = req.body
+            sended_at:{
+                type: Date,
+                default: Date.now
+            },
+            context:{
+                type: String,
+                trim: true
+            },
+            atachment:{
+                type: String,
+                trim: true
+            },
+        
+        }
+    ]
 
-    try {
-        const ticket = await Ticket.create({
-            subject,
-            body,
-            user,
-            assignment,
-            category,
-            status,
-            attachment
-        })
-        res.send(ticket)
+  }
+    
+);
 
-
-    }catch (e) {
-     console.log(e)
-    }
-
-}
+module.exports = mongoose.model("tickets", Tickets);
