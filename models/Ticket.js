@@ -1,41 +1,85 @@
-const mongoose = require('mongoose')
+const mongoose = require("mongoose");
 
+const Schema = mongoose.Schema;
 
-const ticketSchema = new mongoose.Schema({
-    subject: {
+const Tickets = new Schema({
+    
+    support_by:{
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'users'
+    },
+    ticket_by:{
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'users'
+    },
+    create_at:{
+        type: Date,
+        default: Date.now
+    },
+    closet_at:{
+        type: Date
+    },
+    caregory:{
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'category',
+        required: true
+    },
+    archave:{
+        type: Boolean,
+        default: true
+    },
+    redirce_to:{
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'users'
+    },
+    withing:{
+        type: Boolean,
+        default: true
+    },
+    subject:{
         type: String,
-        required: true
+        trim: true
     },
-    body: {
+    rating:{
         type: String,
-        required: true
+        trim: true,
+        default: "0.0"
     },
-    user: {
-        type: String,
-        required: true
+    is_readet:{
+        to:{
+            type: Number,
+            default: 0
+        },
+        status:{
+            type: Boolean,
+            default: false
+        }
     },
-    assignment: {
-        type: String,
-        required: true
-    },
-    category: {
-        type: String,
-        required: true
-    },
-    status: {
-        type: String,
-        required: true
-    },
-    attachment: {
-        type: Array,
-        required: true
-    },
-    replays: {
-        type: Array,
-        required: true
-    }
-});
+    content: [
+        {
 
-const Ticket = mongoose.model('Ticket', ticketSchema)
+            sended_at:{
+                type: Date,
+                default: Date.now
+            },
+            by:{
+                type: Boolean,
+                default: false
+            },
+            context:{
+                type: String,
+                trim: true
+            },
+            atachment:{
+                type: String,
+                trim: true
+            },
+        
+        }
+    ]
 
-module.exports = Ticket
+  }
+    
+);
+
+module.exports = mongoose.model("tickets", Tickets);
